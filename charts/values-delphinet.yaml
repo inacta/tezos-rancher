@@ -1,0 +1,97 @@
+terminationGracePeriodSeconds: 30
+image:
+  repository: tezos/tezos
+  tag: v7.5
+  supportImageTag: latest
+  pullPolicy: Always
+
+service:
+  rpcPort: "8732"
+  rpcPortName: jsonrpc
+  p2pPort: "30000"
+  p2pPortName: p2p
+  port: 8732
+
+externalLB: false
+externalLBIP: ""
+externalLBSourceRanges: {}
+
+externalLBp2p: false
+externalLBp2pIP: ""
+internalLB: false
+internalLBIP: ""
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  dataSize: "100Gi"
+  workdirSize: "5Gi"
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    cpu: "50m"
+    memory: "200Mi"
+  limits:
+    cpu: "3000m"
+    memory: "6000Mi"
+
+# magic numbers are from tezos docker base image
+# https://gitlab.com/tezos/opam-repository/-/blob/master/minimal.Dockerfile
+securityContext:
+  runAsUser: 100
+  runAsGroup: 65533
+  fsGroup: 65533
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: "tezos-node-delphinet"
+          topologyKey: failure-domain.beta.kubernetes.io/zone
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: nodetype
+          operator: In
+          values:
+          - blockchain       
+
+tezos:
+  name: "tezos-node-delphinet"
+
+  workdir_path: "/home/tezos"
+  base_path: "/var/run/tezos"
+  client_path: "/var/run/tezos/client"
+  data_path: "/var/run/tezos/node/data"
+  
+  # possible values  are sandbox, delphinet, carthagenet
+  network: "delphinet"
+  host: "localhost"
+  protocol: "alpha"
+
+  chain_id: "main"
+  # possible values are archive, full and experimental-rolling
+  history_mode: "full"
+  cors_header: "content-type"
+  cors_origin: "*"
+  # how many seconds should liveness check wait for a new block.
+  maxHealthyAge: 3600
+
+  FULL_SNAPSHOT_URL: "https://snapshots-tezos.giganode.io/snapshot-testnet_07-12-2020-01:46_901750_BMG4ApV17aEUY8EoNBiyy6eEU1BNvsBGd5c2jW9YVBb1CE8ivBW.full"
+
+# enable this to run tezos-upgrade-storage as init container
+tezos_upgrade_storage: false
+
+livenessProbe:
+  initialDelaySeconds: 600
+  periodSeconds: 600
+  timeoutSeconds: 500
+  successThreshold: 1
+  failureThreshold: 2

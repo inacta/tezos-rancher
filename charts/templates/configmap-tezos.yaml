@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "tezos-configmap"
+data:
+    NODE_HOST: "localhost"
+    TEZOS_NETWORK: {{ .Values.tezos.network }}
+    DATA_DIR: {{ .Values.tezos.base_path }}
+    FULL_SNAPSHOT_URL: {{ .Values.tezos.FULL_SNAPSHOT_URL }}
+    history_mode: {{ .Values.tezos.history_mode }}
