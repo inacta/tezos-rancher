@@ -53,15 +53,7 @@ affinity:
           labelSelector:
             matchLabels:
               app.kubernetes.io/name: "tezos-node-mainnet"
-          topologyKey: failure-domain.beta.kubernetes.io/zone
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: nodetype
-          operator: In
-          values:
-          - blockchain       
+          topologyKey: failure-domain.beta.kubernetes.io/zone     
 
 tezos:
   name: "tezos-node-mainnet"
