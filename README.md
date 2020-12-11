@@ -13,6 +13,10 @@ The link to the full snapshot can be found in **values-mainnet.yaml** and **valu
 ### Build images
 The init containers have to be built and pushed to a container repository before deployment. The path to each container has to be referenced in ```statefulset.yaml > initContainers.image```
 
+```docker build -t tezos-node-configurator:latest .```
+
+```docker build -t tezos-node-downloader:latest .```
+
 ## Deployment
 
 Assuming that kube config is set up correctly the node can be deployed with one of the following commands.
