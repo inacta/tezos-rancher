@@ -89,7 +89,7 @@ spec:
       - name: tezos-node-configurator
         securityContext:
             runAsUser: 100
-        image: tezos-node-configurator
+        image: # path to tezos-node-configurator
         resources:
           limits:
             cpu: 0
@@ -103,7 +103,7 @@ spec:
       - name: tezos-node-downloader
         securityContext:
             runAsUser: 100
-        image: tezos-node-downloader
+        image: # path to tezos-node-downloader
         volumeMounts:
         - name: tezos-pvc
           mountPath: {{ .Values.tezos.base_path }}
