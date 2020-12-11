@@ -18,7 +18,6 @@ The init containers have to be built and pushed to a container repository before
 ```docker build -t tezos-node-downloader:latest .```
 
 ## Deployment
-
 Assuming that kube config is set up correctly the node can be deployed with one of the following commands.
 
 ```helm upgrade --install tezos-node-testnet charts/tezos/ -n tezos-node-delphinet --values charts/tezos/values-testnet.yaml```
