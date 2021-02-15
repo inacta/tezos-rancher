@@ -1,21 +1,23 @@
 <span style="display:block;text-align:center">![Logo](https://myxtzwallet.tokengate.io/assets/img/logo.png)</span>
 ==========
 
-Tezos Clustersetup on Rancher based on docker with customizable configuration nodes and persisten storage claims. Check the tagged versions for all details. 
+Tezos Node & Baker Service for Rancher. Check the tagged versions for all details.
 
 Features
 
-    Node, Configuration and Chaindownloader
-    Baking service
-    Remote signing service
-    Rewards payment service
-    Clusterready
+    Self-hosted Node
+    Node Configurator
+    Snapshot Downloader
+    Baking Service
+    Rewards Payment Service
 
 Sources/Inspirations
 
     https://tezos.gitlab.io
     https://github.com/midl-dev/tezos-on-gke
     https://github.com/blockchain-etl/tezos-kubernetes
+    https://github.com/tezos-reward-distributor-organization/tezos-reward-distributor
+    https://github.com/serokell/tezos-packaging
     https://snapshots-tezos.giganode.io
 
 Hacking
