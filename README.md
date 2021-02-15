@@ -1,9 +1,21 @@
 <span style="display:block;text-align:center">![Logo](https://myxtzwallet.tokengate.io/assets/img/logo.png)</span>
 ==========
 
-TBD
+Tezos Clustersetup on Rancher based on docker with customizable configuration nodes and persisten storage claims. Check the tagged versions for all details. 
 
+Features
+    Node, Configuration and Chaindownloader
+    Baking service
+    Remote signing service
+    Rewards payment service
+    Clusterready
 
+Sources/Inspirations
+
+    https://tezos.gitlab.io
+    https://github.com/midl-dev/tezos-on-gke
+    https://github.com/blockchain-etl/tezos-kubernetes
+    https://snapshots-tezos.giganode.io
 
 Hacking
 =======
