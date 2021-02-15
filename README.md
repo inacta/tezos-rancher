@@ -4,6 +4,7 @@
 Tezos Clustersetup on Rancher based on docker with customizable configuration nodes and persisten storage claims. Check the tagged versions for all details. 
 
 Features
+
     Node, Configuration and Chaindownloader
     Baking service
     Remote signing service
