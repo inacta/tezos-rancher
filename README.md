@@ -55,7 +55,7 @@ The following persistent volume claims are issued.
 | tezos-pvc   | 100G  | /var/run/tezos |
 | workdir-pvc | 5G    | /home/tezos    |
 
-```tezos-pvc``` will contain node sttings and chain data while ```workdir-pvc``` is reserved for tezos-client data such as the keys for the baker wallet.
+```tezos-pvc``` will contain node settings and chain data while ```workdir-pvc``` is reserved for tezos-client data such as the keys for the baker wallet.
 
 **tezos-payment-service** generates calculations and payment reports in csv format for each cycle. An additional PVC mapping can be made for ```tezos/pymnt/reports```
 
