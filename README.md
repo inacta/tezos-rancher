@@ -12,17 +12,9 @@ Handels chain data. It will process the provided snapshot file and synchronize t
 
 Needs a funded address (min. XTZ 8000/ 1 roll) in /var/run/tezos/client with access to its private keys for signing transactions.
 
-During initialization runs tezos-baker command and passes the alias of the baker address. If this fails for any reason the baker can be started manually with the following command:
-
-```tezos-baker-alpha run with local node /var/run/tezos/node inacta_baker```
-
-Please note, in this scenario the endorser has to be started manually as well. See Endorser.
-
 **tezos-endorser:**
 
-During initialization runs tezos-endorser command. If this fails for any reason the baker can be started manually with the following command:
-
-```tezos-endorser-alpha run inacta_baker```
+During initialization runs tezos-endorser command.
 
 **tezos-accuser:**
 
@@ -49,13 +41,15 @@ The init containers (tezos-node-configurator & tezos-node-downloader) have to be
 
 Using the helm chart the tezos containers will start once the init containers are terminated. **tezos-node-configurator** may take several hours to complete as it retrieves and validates data from the snapshot.
 
-Once the node is started the tezos-baker container might get into a loop. This is due to the missing ```tezos.baker_alias``` and ```tezos.baker_address``` values in the yaml file. Follow the steps in Create Wallet for Baker and restart the instance in Rancher.
+When the node is started for the first time the tezos-baker container might get into a loop. This is due to the missing ```tezos.baker_alias``` and ```tezos.baker_address``` values in the yaml file. Follow the steps in **Create Wallet for Baker** and restart the instance in Rancher.
 
 
 If **tezos-payment-service** is also deployed ```./trd-init.sh``` has to be run manually from the container to start calculations and report generation. If it should start automatically then add ```RUN ./tezos/trd-init.sh``` to the dockerfile.
 
 ## Volumes
 The following persistent volume claims are issued.
+
+
 | Name        | Size  | Mapping        |
 | ------------|:-----:| ---------------|
 | tezos-pvc   | 100G  | /var/run/tezos |
@@ -63,7 +57,7 @@ The following persistent volume claims are issued.
 
 ```tezos-pvc``` will contain node sttings and chain data while ```workdir-pvc``` is reserved for tezos-client data such as the keys for the baker wallet.
 
-**tezos-payment-service** generates calculations and payment report in csv format for each cycle. An additional PVC mapping can be made for ```tezos/pymnt/reports```
+**tezos-payment-service** generates calculations and payment reports in csv format for each cycle. An additional PVC mapping can be made for ```tezos/pymnt/reports```
 
 ## Create Wallet for Baker
 Open a shell to tezos-node.
@@ -78,7 +72,7 @@ Enter a password for the Encryption and confirm it.
 
 ```tezos-signer show address <your_baker_alias> --show-secret```
 
-This will display the Hash, Public Key and Secret Key for the new wallet.
+This will display the Hash, Public Key and Secret Key for the new wallet. Save a copy to a secure location.
 
 **Step 3:**
 
@@ -99,11 +93,11 @@ If this would fail try the same command again by force adding -f at the end.
 When successful a message will display *Tezos address added: <your_baker_address>*
 
 ### Register Baker
-The wallet is now ready to receive funds and sign transactions. You can test signing with a dryrun command:
+The wallet is now ready to receive funds and sign transactions. You can test signing with a dry-run command:
 
 ```tezos-client sign bytes 0x03 for <your_baker_alias>```
 
-Please note, that some wallets may not be able to send funds to this address before its key has been revealed. In this case try to send a nominal amount from another address and run the following command:
+Please note, that some wallets may not be able to send funds to this address before its key has been revealed. In this case try to send a nominal amount from another address (e.g: Galleon) and run the following command:
 
 ```tezos-client reveal key for <your_baker_alias>```
 
@@ -133,7 +127,7 @@ Open a second, separate terminal and start the signer socket.
 
 ```tezos-signer launch local signer -s /home/tezos/.tezos-signer/socket```
 
-It will prompt for the password that was set during passphrase that was set during Step 1 of the Create Wallet for Baker section.
+It will prompt for the password that was set during passphrase that was set during **Step 1 of the Create Wallet for Baker** section.
 
 **Step 3**:
 
