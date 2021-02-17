@@ -11,9 +11,12 @@ keywords:
 maintainers:
 - email: 
   name: Inacta AG
-name: tezos-public-node
+name: tezos-node-baker
 sources:
-- https://github.com/kubernetes/charts
-- https://gitlab.com/tezos/tezos
+- https://tezos.gitlab.io
 - https://github.com/midl-dev/tezos-on-gke
+- https://github.com/blockchain-etl/tezos-kubernetes
+- https://github.com/tezos-reward-distributor-organization/tezos-reward-distributor
+- https://github.com/serokell/tezos-packaging
+- https://snapshots-tezos.giganode.io
 version: 1.0.0

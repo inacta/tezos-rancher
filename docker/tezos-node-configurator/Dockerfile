@@ -1,4 +1,4 @@
-FROM tezos/tezos:v7.5
+FROM tezos/tezos:v8.2
 COPY tezos-node-configurator.sh /
 USER root
 RUN chmod a+rx /tezos-node-configurator.sh

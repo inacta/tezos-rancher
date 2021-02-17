@@ -39,8 +39,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
-      imagePullSecrets:
-      - name: artifactory
       containers:
       - name: {{ .Chart.Name }}-node
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -85,11 +83,164 @@ spec:
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.livenessProbe.successThreshold }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+      - name: {{ .Chart.Name }}-baker
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - secretRef:
+            name: "{{ .Release.Name }}-env"
+        args:
+          - tezos-baker
+          - {{ .Values.tezos.baker_alias}}
+        workingDir: {{ .Values.tezos.workdir_path }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        ports:
+        - containerPort: {{ .Values.service.rpcPort }}
+          name: "{{ .Values.service.rpcPortName }}"
+          protocol: "TCP"
+        - containerPort: {{ .Values.service.p2pPort }}
+          name: "{{ .Values.service.p2pPortName }}"
+          protocol: "TCP"
+        volumeMounts:
+        - name: tezos-pvc
+          mountPath: {{ .Values.tezos.base_path }}
+        - name: workdir-pvc
+          mountPath: {{ .Values.tezos.workdir_path }}
+        - name: scripts
+          mountPath: /scripts
+        livenessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - /scripts/check_node_health.sh
+              - "{{ .Values.tezos.base_path }}"
+              - "{{ .Values.tezos.maxHealthyAge }}"
+              - last_synced_block.txt
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+      - name: {{ .Chart.Name }}-endorser
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - secretRef:
+            name: "{{ .Release.Name }}-env"
+        args:
+          - tezos-endorser
+        workingDir: {{ .Values.tezos.workdir_path }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        ports:
+        - containerPort: {{ .Values.service.rpcPort }}
+          name: "{{ .Values.service.rpcPortName }}"
+          protocol: "TCP"
+        - containerPort: {{ .Values.service.p2pPort }}
+          name: "{{ .Values.service.p2pPortName }}"
+          protocol: "TCP"
+        volumeMounts:
+        - name: tezos-pvc
+          mountPath: {{ .Values.tezos.base_path }}
+        - name: workdir-pvc
+          mountPath: {{ .Values.tezos.workdir_path }}
+        - name: scripts
+          mountPath: /scripts
+        livenessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - /scripts/check_node_health.sh
+              - "{{ .Values.tezos.base_path }}"
+              - "{{ .Values.tezos.maxHealthyAge }}"
+              - last_synced_block.txt
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+      - name: {{ .Chart.Name }}-accuser
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - secretRef:
+            name: "{{ .Release.Name }}-env"
+        args:
+          - tezos-accuser
+        workingDir: {{ .Values.tezos.workdir_path }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        ports:
+        - containerPort: {{ .Values.service.rpcPort }}
+          name: "{{ .Values.service.rpcPortName }}"
+          protocol: "TCP"
+        - containerPort: {{ .Values.service.p2pPort }}
+          name: "{{ .Values.service.p2pPortName }}"
+          protocol: "TCP"
+        volumeMounts:
+        - name: tezos-pvc
+          mountPath: {{ .Values.tezos.base_path }}
+        - name: workdir-pvc
+          mountPath: {{ .Values.tezos.workdir_path }}
+        - name: scripts
+          mountPath: /scripts
+        livenessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - /scripts/check_node_health.sh
+              - "{{ .Values.tezos.base_path }}"
+              - "{{ .Values.tezos.maxHealthyAge }}"
+              - last_synced_block.txt
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+      - name: {{ .Chart.Name }}-payment-service
+        image: ## image for tezos-payment-service
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - secretRef:
+            name: "{{ .Release.Name }}-env"
+        args:
+          - tezos-payment-service
+        workingDir: {{ .Values.tezos.workdir_path }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        ports:
+        - containerPort: {{ .Values.service.rpcPort }}
+          name: "{{ .Values.service.rpcPortName }}"
+          protocol: "TCP"
+        - containerPort: {{ .Values.service.p2pPort }}
+          name: "{{ .Values.service.p2pPortName }}"
+          protocol: "TCP"
+        volumeMounts:
+        - name: tezos-pvc
+          mountPath: {{ .Values.tezos.base_path }}
+        - name: workdir-pvc
+          mountPath: {{ .Values.tezos.workdir_path }}
+        - name: scripts
+          mountPath: /scripts
+        livenessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - /scripts/check_node_health.sh
+              - "{{ .Values.tezos.base_path }}"
+              - "{{ .Values.tezos.maxHealthyAge }}"
+              - last_synced_block.txt
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
       initContainers:
       - name: tezos-node-configurator
         securityContext:
             runAsUser: 100
-        image: # path to tezos-node-configurator
+        image: # path to tezos-node-configurator image
         resources:
           limits:
             cpu: 0
@@ -103,7 +254,7 @@ spec:
       - name: tezos-node-downloader
         securityContext:
             runAsUser: 100
-        image: # path to tezos-node-downloader
+        image: # path to tezos-node-downloader image
         volumeMounts:
         - name: tezos-pvc
           mountPath: {{ .Values.tezos.base_path }}
@@ -121,8 +272,6 @@ spec:
         resources:
           limits:
             cpu: 0
-        # command: ["/bin/sh"]
-        # args: ["-exc", "sleep 3600"]
         imagePullPolicy: Always
       {{- if .Values.tezos_upgrade_storage }}
       - name: tezos-upgrade-storage

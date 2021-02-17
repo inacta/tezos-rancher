@@ -1,7 +1,7 @@
 terminationGracePeriodSeconds: 30
 image:
   repository: tezos/tezos
-  tag: v7.5
+  tag: v8.2
   supportImageTag: latest
   pullPolicy: Always
 
@@ -67,6 +67,8 @@ tezos:
   network: "delphinet"
   host: "localhost"
   protocol: "alpha"
+  baker_alias: "*"
+  baker_address: "*"
 
   chain_id: "main"
   # possible values are archive, full and experimental-rolling

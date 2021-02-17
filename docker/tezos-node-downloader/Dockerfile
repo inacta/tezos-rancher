@@ -1,4 +1,4 @@
-FROM tezos/tezos:v7.5
+FROM tezos/tezos:v8.2
 RUN sudo apk add curl lz4 xz jq
 COPY tezos-node-downloader.sh /
 USER root

@@ -1,7 +1,7 @@
 terminationGracePeriodSeconds: 30
 image:
   repository: tezos/tezos
-  tag: v7.5
+  tag: v8.2
   supportImageTag: latest
   pullPolicy: Always
 
@@ -67,6 +67,8 @@ tezos:
   network: "mainnet"
   host: "localhost"
   protocol: "alpha"
+  baker_alias: "*"
+  baker_address: "*"
 
   chain_id: "main"
   # possible values are archive, full and experimental-rolling
@@ -76,7 +78,7 @@ tezos:
   # how many seconds should liveness check wait for a new block.
   maxHealthyAge: 3600
 
-  FULL_SNAPSHOT_URL: "https://snapshots-tezos.giganode.io/snapshot-mainnet_07-12-2020-01:34_1247166_BLdNmUHzZ6VPYB9yxPVpC1k731dLQhWycbpKo3ChvoSVv1j47N5.full"
+  FULL_SNAPSHOT_URL: "https://snapshots-tezos.giganode.io/snapshot-mainnet_15-02-2021-0134_1345151_BL78QyuekGzDW7t3SewGctyPkpeNmETeFkdYvPC83rVQXVzWdey.full"
 
 # enable this to run tezos-upgrade-storage as init container
 tezos_upgrade_storage: false
