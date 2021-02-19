@@ -64,11 +64,12 @@ tezos:
   data_path: "/var/run/tezos/node/data"
   
   # possible values  are sandbox, mainnet, carthagenet
+  # update baker_alias and baker_address after first initializing the node
   network: "mainnet"
   host: "localhost"
   protocol: "alpha"
-  baker_alias: "*"
-  baker_address: "*"
+  baker_alias: "<baker_alias>"
+  baker_address: "<baker_address>"
 
   chain_id: "main"
   # possible values are archive, full and experimental-rolling

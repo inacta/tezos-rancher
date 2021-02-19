@@ -2,6 +2,18 @@
 
 This repository deploys a Tezos node and baker (v8.2) on Rancher with an optional payment service.
 
+## Pre-requisites
+
+The underling infrastructure is not in scope for this project. It is assumed that the user is familiar with and has a working setup of the following tools and modules.
+* [Rancher](https://rancher.com/) (known to work with v2.4.6)
+* [longhorn](https://longhorn.io/docs/0.8.0/install/install-with-rancher/)
+* [docker](https://docs.docker.com/get-docker/)
+* [docker-compose](https://docs.docker.com/compose/install/)
+* [helm](https://helm.sh/docs/intro/install/) (known to work with v3.3.1)
+* [kubectl](https://kubernetes.io/de/docs/tasks/tools/install-kubectl/) (known to work with Client v1.19.0)
+* kube config
+* a docker registry (such as [Artifactory](https://www.jfrog.com/confluence/display/JFROG/Installing+Artifactory))
+
 ## Docker Images
 
 **tezos-node:**
