@@ -198,49 +198,11 @@ spec:
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.livenessProbe.successThreshold }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-      - name: {{ .Chart.Name }}-payment-service
-        image: ## image for tezos-payment-service
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        envFrom:
-        - secretRef:
-            name: "{{ .Release.Name }}-env"
-        args:
-          - tezos-payment-service
-        workingDir: {{ .Values.tezos.workdir_path }}
-        resources:
-          {{- toYaml .Values.resources | nindent 10 }}
-        ports:
-        - containerPort: {{ .Values.service.rpcPort }}
-          name: "{{ .Values.service.rpcPortName }}"
-          protocol: "TCP"
-        - containerPort: {{ .Values.service.p2pPort }}
-          name: "{{ .Values.service.p2pPortName }}"
-          protocol: "TCP"
-        volumeMounts:
-        - name: tezos-pvc
-          mountPath: {{ .Values.tezos.base_path }}
-        - name: workdir-pvc
-          mountPath: {{ .Values.tezos.workdir_path }}
-        - name: scripts
-          mountPath: /scripts
-        livenessProbe:
-          exec:
-            command:
-              - /bin/sh
-              - /scripts/check_node_health.sh
-              - "{{ .Values.tezos.base_path }}"
-              - "{{ .Values.tezos.maxHealthyAge }}"
-              - last_synced_block.txt
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
       initContainers:
       - name: tezos-node-configurator
         securityContext:
             runAsUser: 100
-        image: # path to tezos-node-configurator image
+        image: {{ .Values.initContainers.configurator_image }}
         resources:
           limits:
             cpu: 0
@@ -254,7 +216,7 @@ spec:
       - name: tezos-node-downloader
         securityContext:
             runAsUser: 100
-        image: # path to tezos-node-downloader image
+        image: {{ .Values.initContainers.downloader_image }}
         volumeMounts:
         - name: tezos-pvc
           mountPath: {{ .Values.tezos.base_path }}

@@ -2,7 +2,6 @@ terminationGracePeriodSeconds: 30
 image:
   repository: tezos/tezos
   tag: v8.2
-  supportImageTag: latest
   pullPolicy: Always
 
 service:
@@ -80,6 +79,11 @@ tezos:
   maxHealthyAge: 3600
 
   FULL_SNAPSHOT_URL: "https://snapshots-tezos.giganode.io/snapshot-mainnet_15-02-2021-0134_1345151_BL78QyuekGzDW7t3SewGctyPkpeNmETeFkdYvPC83rVQXVzWdey.full"
+
+initContainers:
+  # paste url of images including the tags here
+  configurator_image: ""
+  downloader_image: ""
 
 # enable this to run tezos-upgrade-storage as init container
 tezos_upgrade_storage: false

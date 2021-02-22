@@ -8,7 +8,6 @@ The underling infrastructure is not in scope for this project. It is assumed tha
 * [Rancher](https://rancher.com/) (known to work with v2.4.6)
 * [longhorn](https://longhorn.io/docs/0.8.0/install/install-with-rancher/)
 * [docker](https://docs.docker.com/get-docker/)
-* [docker-compose](https://docs.docker.com/compose/install/)
 * [helm](https://helm.sh/docs/intro/install/) (known to work with v3.3.1)
 * [kubectl](https://kubernetes.io/de/docs/tasks/tools/install-kubectl/) (known to work with Client v1.19.0)
 * kube config
@@ -18,7 +17,7 @@ The underling infrastructure is not in scope for this project. It is assumed tha
 
 **tezos-node:**
 
-Handels chain data. It will process the provided snapshot file and synchronize the rest to be up-to-date.
+Handles chain data. It will process the provided snapshot file and synchronize the rest to be up-to-date.
 
 **tezos-baker:**
 
@@ -47,14 +46,13 @@ More information to the configuration options can be found at [Tezos Reward Dist
 It is recommended to use a second wallet, that is separate from the baker's, for reward payments only. The payment wallet can also be delegated to the baker in order to fully utilize funds.
 
 ### Build images
-The init containers (tezos-node-configurator & tezos-node-downloader) have to be built and pushed to a container repository before deployment. The path to each container has to be referenced in ```statefulset.yaml > initContainers.image```
+The init containers (tezos-node-configurator & tezos-node-downloader) have to be built and pushed to a container repository before deployment. The path to each container has to be referenced in the values-(mainnet/delphinet).yaml file at ```initContainers.configurator_image``` and ```initContainers.downloader_image``` respectively.
 
 ## Deployment
 
 Using the helm chart the tezos containers will start once the init containers are terminated. **tezos-node-configurator** may take several hours to complete as it retrieves and validates data from the snapshot.
 
 When the node is started for the first time the tezos-baker container might get into a loop. This is due to the missing ```tezos.baker_alias``` and ```tezos.baker_address``` values in the yaml file. Follow the steps in **Create Wallet for Baker** and restart the instance in Rancher.
-
 
 If **tezos-payment-service** is also deployed ```./trd-init.sh``` has to be run manually from the container to start calculations and report generation. If it should start automatically then add ```RUN ./tezos/trd-init.sh``` to the dockerfile.
 
@@ -133,7 +131,6 @@ Clear tezos-client of the imported baker address and remove the existing socket.
 ```rm -rf /home/tezos/.tezos-signer/socket```
 
 **Step 2:**
-
 
 Open a second, separate terminal and start the signer socket.
 
